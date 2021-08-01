@@ -6,12 +6,11 @@ body {
 
 #root {
   display: grid;
-  grid-template-columns: 33% repeat(auto-fit, minmax(100px, 1fr));
+  grid-template-columns: 20% 30% repeat(auto-fit, minmax(100px, 1fr));
   height: 100vh;
 }
 
 .menu-area {
-  background-color: #ccc;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -20,15 +19,26 @@ body {
 
 .menu {
   padding: 8px;
-  background-color: #ddd;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.canvas-area {
+.log-area {
+  margin: 10vh 0;
+  padding: 8px;
   background-color: black;
+  max-height: 100vh;
+  overflow: auto;
+}
+
+.log-area > span {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10pt;
+}
+
+.canvas-area {
   display: flex;
   justify-content: center;
   align-items: center;

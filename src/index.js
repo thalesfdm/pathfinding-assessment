@@ -1,6 +1,7 @@
-import Graph from "./Graph.js";
-import routes from "./routes.js";
-import coordinates from "./coordinates.js";
+import Graph from "./assets/js/classes/Graph.js";
+import Logger from "./assets/js/classes/Logger.js";
+import routes from "./assets/js/data/routes.js";
+import coordinates from "./assets/js/data/coordinates.js";
 
 const fromList = document.getElementById("from-list");
 const toList = document.getElementById("to-list");
@@ -22,6 +23,7 @@ ctx.canvas.width = img.width;
 ctx.canvas.height = img.height;
 img.onload = () => ctx.drawImage(img, 0, 0);
 
+const logger = new Logger(document.getElementById("logger"));
 const graph = Graph.fromJson(routes);
 
 const renderFromTo = (from, to) => {
@@ -47,16 +49,18 @@ const renderFromTo = (from, to) => {
 
 fromList.addEventListener("change", () => {
   renderFromTo(fromList.value, toList.value);
-  renderPath(getPath(fromList.value, toList.value));
+  renderPath(getPath(fromList.value, toList.value, logger));
 });
 
 toList.addEventListener("change", () => {
   renderFromTo(fromList.value, toList.value);
-  renderPath(getPath(fromList.value, toList.value));
+  renderPath(getPath(fromList.value, toList.value, logger));
 });
 
-const getPath = (from, to) => {
-  return graph.getShortestPath(from, to);
+const getPath = (from, to, logger) => {
+  logger = logger || null;
+  if (logger) logger.clear();
+  return graph.getShortestPath(from, to, logger);
 };
 
 const renderPath = (path) => {

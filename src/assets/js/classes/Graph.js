@@ -1,3 +1,6 @@
+import Node from "./Node.js";
+import NodeEntry from "./NodeEntry.js";
+import Path from "./Path.js";
 import PriorityQueue from "./PriorityQueue.js";
 
 class Graph {
@@ -48,7 +51,11 @@ class Graph {
     return path;
   }
 
-  getShortestPath(from, to) {
+  getShortestPath(from, to, logger) {
+    logger = logger || null;
+
+    if (logger) logger.println("# Dijkstra", "#fff");
+
     const fromNode = this.nodes.get(from);
     const toNode = this.nodes.get(to);
 
@@ -67,10 +74,15 @@ class Graph {
       const current = queue.remove().node;
       visited.add(current);
 
-      console.log("currently at " + current.label);
+      if (logger) logger.println("currently at " + current.label, "#0f0");
+
+      if (current == toNode) break;
 
       current.edges.forEach((edge) => {
-        console.log("-> checking " + edge.to.label);
+        if (logger) {
+          logger.print("--> checking " + edge.to.label, "#0a0");
+          logger.println(" (" + edge.weight + " km)", "#aaa");
+        }
 
         if (visited.has(edge.to)) return;
 
@@ -84,42 +96,6 @@ class Graph {
     }
 
     return this.buildPath(previousNodes, toNode);
-  }
-}
-
-class Node {
-  constructor(label) {
-    this.label = label;
-    this.edges = new Array();
-  }
-
-  addEdge(to, weight) {
-    this.edges.push(new Edge(this, to, weight));
-  }
-}
-
-class NodeEntry {
-  constructor(node, priority) {
-    this.node = node;
-    this.priority = priority;
-  }
-}
-
-class Edge {
-  constructor(from, to, weight) {
-    this.from = from;
-    this.to = to;
-    this.weight = weight;
-  }
-}
-
-class Path {
-  constructor() {
-    this.nodes = new Array();
-  }
-
-  add(node) {
-    this.nodes.push(node);
   }
 }
 
