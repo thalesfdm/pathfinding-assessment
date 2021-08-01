@@ -1,0 +1,14 @@
+{
+  "name": "pathfinding-assessment",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "start": "live-server --entry-file=./src/index.html --port=1234",
+    "format": "prettier --write ."
+  },
+  "author": "Thales F. Dal Molim",
+  "devDependencies": {
+    "live-server": "^1.2.1",
+    "prettier": "^2.3.2"
+  }
+}
