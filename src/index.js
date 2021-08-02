@@ -7,6 +7,7 @@ import coordinates from "./assets/js/data/coordinates.js";
 const fromList = document.getElementById("from-list");
 const toList = document.getElementById("to-list");
 const searchButton = document.getElementById("search-button");
+const algorithm = document.getElementsByName("algorithm");
 
 for (let city in coordinates) {
   const option = document.createElement("option");
@@ -25,6 +26,12 @@ const cartographer = new Cartographer(
 const logger = new Logger(document.getElementById("logger"));
 const graph = Graph.fromJson(routes, logger, cartographer);
 
+console.log(algorithm)
+
 searchButton.addEventListener("click", () => {
-  return graph.uniformCostSearch(fromList.value, toList.value);
-});
+  if (document.getElementById("dfs").checked)
+      return graph.depthFirstSearch(fromList.value, toList.value);
+  else if (document.getElementById("ucs").checked)
+      return graph.uniformCostSearch(fromList.value, toList.value);
+  }
+);

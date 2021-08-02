@@ -12,28 +12,31 @@
     <div id="root">
       <div class="menu-area">
         <div class="menu">
-          <!-- <div class="from-to-container"></div> -->
-          <div class="menu-item">
-            <span>From</span>
-            <select id="from-list"></select>
-          </div>
-          <div class="menu-item">
-            <span>To</span>
-            <select id="to-list"></select>
-          </div>
-          <!-- </div> -->
+          <fieldset class="menu-item">
+            <legend>Cities</legend>
+            <div class="menu-item">
+              <span>From</span>
+              <select id="from-list"></select>
+            </div>
+            <div class="menu-item">
+              <span>To</span>
+              <select id="to-list"></select>
+            </div>
+          </fieldset>
           <fieldset class="menu-item">
             <legend>Algorithm</legend>
+            <div>
+              <input id="dfs" type="radio" name="algorithm" value="dfs" />
+              <label for="dfs">Depth First Search</label>
+            </div>
             <div>
               <input id="ucs" type="radio" name="algorithm" value="ucs" />
               <label for="ucs">Uniform Cost Search</label>
             </div>
-            <div>
-              <input id="a-star" type="radio" name="algorithm" value="a-star" />
-              <label for="a-star">A*</label>
-            </div>
           </fieldset>
-          <button id="search-button">Search</button>
+          <div class="menu-item">
+            <button id="search-button">Search</button>
+          </div>
         </div>
       </div>
       <div id="logger" class="log-area"></div>

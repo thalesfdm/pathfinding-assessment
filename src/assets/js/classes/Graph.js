@@ -53,9 +53,99 @@ class Graph {
     return path;
   }
 
+  async depthFirstSearch(from, to) {
+    if (this.logger) {
+      this.logger.clear();
+      this.logger.println("# DEPTH FIRST SEARCH", "yellow");
+      this.logger.print("Starting at ", "white");
+      this.logger.print(from, "lightgreen");
+      this.logger.println("...", "white");
+    }
+
+    if (this.cartographer) {
+      this.cartographer.clearMap();
+      this.cartographer.addMarker(
+        this.cartographer.coordinates[from]["x"],
+        this.cartographer.coordinates[from]["y"]
+      );
+      this.cartographer.addMarker(
+        this.cartographer.coordinates[to]["x"],
+        this.cartographer.coordinates[to]["y"]
+      );
+    }
+
+    const fromNode = this.nodes.get(from);
+    const toNode = this.nodes.get(to);
+
+    const previousNodes = new Map();
+    const visited = new Set();
+    const stack = new Array();
+
+    stack.push(fromNode);
+
+    while (stack.length != 0) {
+      const current = stack.pop();
+
+      if (visited.has(current)) continue;
+      if (current == toNode) break;
+
+      visited.add(current);
+
+      for (const edge of current.edges) {
+        if (!visited.has(edge.to)) stack.push(edge.to);
+
+        if (this.logger) {
+          this.logger.print("From ", "green");
+          this.logger.print(edge.from.label, "lightgreen");
+          this.logger.print(", checking ", "green");
+          this.logger.print(edge.to.label, "lightgreen");
+          this.logger.println("...", "green");
+        }
+
+        if (this.cartographer) {
+          await this.cartographer.drawRoute(
+            this.cartographer.coordinates[edge.from.label]["x"],
+            this.cartographer.coordinates[edge.from.label]["y"],
+            this.cartographer.coordinates[edge.to.label]["x"],
+            this.cartographer.coordinates[edge.to.label]["y"],
+            "#0f0",
+            3
+          );
+          this.cartographer.addMarker(
+            this.cartographer.coordinates[edge.to.label]["x"],
+            this.cartographer.coordinates[edge.to.label]["y"],
+            "#0f0",
+            4
+          );
+          this.cartographer.addMarker(
+            this.cartographer.coordinates[from]["x"],
+            this.cartographer.coordinates[from]["y"]
+          );
+          this.cartographer.addMarker(
+            this.cartographer.coordinates[to]["x"],
+            this.cartographer.coordinates[to]["y"]
+          );
+        }
+      }
+    }
+
+    const path = this.buildPath(previousNodes, toNode);
+
+    if (this.logger) {
+      this.logger.println("Found a path!", "white");
+      this.logger.println(path.toString(), "yellow");
+      this.logger.println("Distance: " + distances.get(toNode), "white");
+    }
+
+    if (this.cartographer) await this.cartographer.drawPath(path);
+
+    return path;
+  }
+
   async uniformCostSearch(from, to) {
     if (this.logger) {
       this.logger.clear();
+      this.logger.println("# UNIFORM COST SEARCH", "yellow");
       this.logger.print("Starting at ", "white");
       this.logger.print(from, "lightgreen");
       this.logger.println("...", "white");
@@ -142,7 +232,7 @@ class Graph {
     const path = this.buildPath(previousNodes, toNode);
 
     if (this.logger) {
-      this.logger.println("Found the best path!", "white");
+      this.logger.println("Found a path!", "white");
       this.logger.println(path.toString(), "yellow");
       this.logger.println("Distance: " + distances.get(toNode), "white");
     }

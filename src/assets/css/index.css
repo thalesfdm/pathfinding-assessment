@@ -36,6 +36,10 @@ body {
   padding: 6px;
 }
 
+#search-button {
+  padding: 6px;
+}
+
 .log-area {
   margin: 10vh 0;
   padding: 8px;
