@@ -2,6 +2,7 @@ html,
 body {
   margin: 0;
   padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 #root {
@@ -18,11 +19,21 @@ body {
 }
 
 .menu {
-  padding: 8px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.menu-item {
+  display: flex;
+  flex-direction: column;
+  margin: 8px 0px;
+  width: 100%;
+}
+
+.menu-item > select {
+  padding: 6px;
 }
 
 .log-area {
@@ -34,7 +45,7 @@ body {
 }
 
 .log-area > span {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: monospace;
   font-size: 10pt;
 }
 

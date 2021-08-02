@@ -4,8 +4,10 @@ import Path from "./Path.js";
 import PriorityQueue from "./PriorityQueue.js";
 
 class Graph {
-  constructor() {
+  constructor(logger, cartographer) {
     this.nodes = new Map();
+    this.cartographer = cartographer;
+    this.logger = logger;
   }
 
   addNode(label) {
@@ -18,8 +20,8 @@ class Graph {
     fromNode.addEdge(toNode, weight);
   }
 
-  static fromJson(data) {
-    const graph = new Graph();
+  static fromJson(data, logger, cartographer) {
+    const graph = new Graph(logger, cartographer);
 
     Object.keys(data).forEach((key) => {
       const from = key;
@@ -51,10 +53,20 @@ class Graph {
     return path;
   }
 
-  getShortestPath(from, to, logger) {
-    logger = logger || null;
+  async uniformCostSearch(from, to) {
+    if (this.logger) this.logger.clear();
 
-    if (logger) logger.println("# Dijkstra", "#fff");
+    if (this.cartographer) {
+      this.cartographer.clearMap();
+      this.cartographer.addMarker(
+        this.cartographer.coordinates[from]["x"],
+        this.cartographer.coordinates[from]["y"]
+      );
+      this.cartographer.addMarker(
+        this.cartographer.coordinates[to]["x"],
+        this.cartographer.coordinates[to]["y"]
+      );
+    }
 
     const fromNode = this.nodes.get(from);
     const toNode = this.nodes.get(to);
@@ -74,28 +86,49 @@ class Graph {
       const current = queue.remove().node;
       visited.add(current);
 
-      if (logger) logger.println("currently at " + current.label, "#0f0");
-
       if (current == toNode) break;
 
-      current.edges.forEach((edge) => {
-        if (logger) {
-          logger.print("--> checking " + edge.to.label, "#0a0");
-          logger.println(" (" + edge.weight + " km)", "#aaa");
-        }
-
-        if (visited.has(edge.to)) return;
+      for (const edge of current.edges) {
+        if (visited.has(edge.to)) continue;
 
         const newDistance = distances.get(current) + edge.weight;
+
         if (newDistance < distances.get(edge.to)) {
           distances.set(edge.to, newDistance);
           previousNodes.set(edge.to, current);
           queue.add(new NodeEntry(edge.to, newDistance));
+
+          if (this.cartographer) {
+            await this.cartographer.drawRoute(
+              this.cartographer.coordinates[edge.from.label]["x"],
+              this.cartographer.coordinates[edge.from.label]["y"],
+              this.cartographer.coordinates[edge.to.label]["x"],
+              this.cartographer.coordinates[edge.to.label]["y"],
+              "#0f0",
+              3
+            );
+            this.cartographer.addMarker(
+              this.cartographer.coordinates[edge.to.label]["x"],
+              this.cartographer.coordinates[edge.to.label]["y"],
+              "#0f0",
+              4
+            );
+            this.cartographer.addMarker(
+              this.cartographer.coordinates[from]["x"],
+              this.cartographer.coordinates[from]["y"]
+            );
+            this.cartographer.addMarker(
+              this.cartographer.coordinates[to]["x"],
+              this.cartographer.coordinates[to]["y"]
+            );
+          }
         }
-      });
+      }
     }
 
-    return this.buildPath(previousNodes, toNode);
+    const path = this.buildPath(previousNodes, toNode);
+    await this.cartographer.drawPath(path);
+    return path;
   }
 }
 

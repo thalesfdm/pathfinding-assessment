@@ -22,6 +22,10 @@ class PriorityQueue {
     return this.items[--this.count];
   }
 
+  peek() {
+    return this.items[this.count - 1];
+  }
+
   isEmpty() {
     return this.count == 0;
   }
