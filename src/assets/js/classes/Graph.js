@@ -54,7 +54,12 @@ class Graph {
   }
 
   async uniformCostSearch(from, to) {
-    if (this.logger) this.logger.clear();
+    if (this.logger) {
+      this.logger.clear();
+      this.logger.print("Starting at ", "white");
+      this.logger.print(from, "lightgreen");
+      this.logger.println("...", "white");
+    }
 
     if (this.cartographer) {
       this.cartographer.clearMap();
@@ -98,6 +103,14 @@ class Graph {
           previousNodes.set(edge.to, current);
           queue.add(new NodeEntry(edge.to, newDistance));
 
+          if (this.logger) {
+            this.logger.print("From ", "green");
+            this.logger.print(edge.from.label, "lightgreen");
+            this.logger.print(", checking ", "green");
+            this.logger.print(edge.to.label, "lightgreen");
+            this.logger.println("...", "green");
+          }
+
           if (this.cartographer) {
             await this.cartographer.drawRoute(
               this.cartographer.coordinates[edge.from.label]["x"],
@@ -127,7 +140,15 @@ class Graph {
     }
 
     const path = this.buildPath(previousNodes, toNode);
-    await this.cartographer.drawPath(path);
+
+    if (this.logger) {
+      this.logger.println("Found the best path!", "white");
+      this.logger.println(path.toString(), "yellow");
+      this.logger.println("Distance: " + distances.get(toNode), "white");
+    }
+
+    if (this.cartographer) await this.cartographer.drawPath(path);
+
     return path;
   }
 }
