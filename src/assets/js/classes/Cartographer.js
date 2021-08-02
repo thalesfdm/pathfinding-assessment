@@ -1,12 +1,19 @@
 class Cartographer {
   constructor(canvas, image, coordinates) {
     this.ctx = canvas.getContext("2d");
-    this.map = new Image();
-    this.map.src = image;
+    this.loadMap(image);
+    this.coordinates = coordinates;
+  }
+
+  async loadMap(image) {
+    this.map = await new Promise((r) => {
+      const img = new Image();
+      img.onload = () => r(img);
+      img.src = image;
+    });
     this.ctx.canvas.width = this.map.width;
     this.ctx.canvas.height = this.map.height;
-    this.map.onload = () => this.ctx.drawImage(this.map, 0, 0);
-    this.coordinates = coordinates;
+    this.ctx.drawImage(this.map, 0, 0);
   }
 
   clearMap() {
