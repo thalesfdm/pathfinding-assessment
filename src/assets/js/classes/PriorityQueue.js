@@ -22,6 +22,10 @@ class PriorityQueue {
     return this.items[--this.count];
   }
 
+  has(item) {
+    return this.items.includes(item);
+  }
+
   peek() {
     return this.items[this.count - 1];
   }

@@ -1,8 +1,9 @@
 class Cartographer {
-  constructor(canvas, image, coordinates) {
+  constructor(canvas, image, coordinates, color) {
     this.ctx = canvas.getContext("2d");
     this.loadMap(image);
     this.coordinates = coordinates;
+    this.color = color || "blue";
   }
 
   async loadMap(image) {
@@ -24,7 +25,7 @@ class Cartographer {
   addMarker(x, y, color, radius) {
     this.ctx.beginPath();
     this.ctx.arc(x, y, radius || 8, 0, 2 * Math.PI);
-    this.ctx.fillStyle = color || "blue";
+    this.ctx.fillStyle = color || this.color;
     this.ctx.fill();
   }
 
@@ -33,7 +34,7 @@ class Cartographer {
     this.ctx.moveTo(fromX, fromY);
     this.ctx.lineTo(toX, toY);
     this.ctx.lineWidth = width || 3;
-    this.ctx.strokeStyle = color || "blue";
+    this.ctx.strokeStyle = color || this.color;
     await this.takeTime(250);
     this.ctx.stroke();
   }

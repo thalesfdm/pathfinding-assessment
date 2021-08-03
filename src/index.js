@@ -26,8 +26,8 @@ const logger = new Logger(document.getElementById("logger"));
 const graph = Graph.fromJson(routes, logger, cartographer);
 
 searchButton.addEventListener("click", () => {
-  if (document.getElementById("dfs").checked)
-    return graph.depthFirstSearch(fromList.value, toList.value);
-  else if (document.getElementById("ucs").checked)
+  if (document.getElementById("ucs").checked)
     return graph.uniformCostSearch(fromList.value, toList.value);
+  else if (document.getElementById("ast").checked)
+    return graph.aStarSearch(fromList.value, toList.value);
 });
