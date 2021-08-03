@@ -122,7 +122,7 @@ class Graph {
     if (this.logger) {
       this.logger.println("Found a path!", "white");
       this.logger.println(path.toString(), "yellow");
-      this.logger.println("Distance: " + distances.get(toNode), "white");
+      this.logger.println("Distance: " + distances.get(toNode) + " km", "white");
     }
 
     this.cartographer.color = "blue";
@@ -181,8 +181,7 @@ class Graph {
             edge.to,
             gScore.get(edge.to) + this.getHeuristics(edge.to, toNode)
           );
-          // const entry = new NodeEntry(edge.to, fScore);
-          /*           if (!queue.has(entry))  */
+
           queue.add(new NodeEntry(edge.to, fScore.get(edge.to)));
         }
 
@@ -208,7 +207,7 @@ class Graph {
     if (this.logger) {
       this.logger.println("Found a path!", "white");
       this.logger.println(path.toString(), "yellow");
-      this.logger.println("Distance: " + gScore.get(toNode), "white");
+      this.logger.println("Distance: " + gScore.get(toNode) + " km", "white");
     }
 
     this.cartographer.color = "blue";
